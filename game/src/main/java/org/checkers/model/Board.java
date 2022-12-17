@@ -9,29 +9,29 @@ public class Board {
 
     public Board(){
         this.pieces = new ArrayList<>();
-        this.pieces.addAll(setUpBlack());
+        this.pieces.addAll(setUpRed());
         this.pieces.addAll(setUpWhite());
     }
-    private ArrayList<Piece> setUpWhite(){
+    private ArrayList<Piece> setUpRed(){
         ArrayList<Piece> toBeSet = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece((2*i)+1, 0, Color.WHITE));
-            toBeSet.add(new Piece((2*i)+1, 2, Color.WHITE));
+            toBeSet.add(new Piece((2*i)+1, 0, Color.RED));
+            toBeSet.add(new Piece((2*i)+1, 2, Color.RED));
         }
         for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece(2*i, 1, Color.WHITE));
+            toBeSet.add(new Piece(2*i, 1, Color.RED));
         }
         return toBeSet;
     }
 
-    private ArrayList<Piece> setUpBlack(){
+    private ArrayList<Piece> setUpWhite(){
         ArrayList<Piece> toBeSet = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece(2*i, 7, Color.BLACK));
-            toBeSet.add(new Piece(2*i, 5, Color.BLACK));
+            toBeSet.add(new Piece(2*i, 7, Color.WHITE));
+            toBeSet.add(new Piece(2*i, 5, Color.WHITE));
         }
         for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece((2*i)+1, 6, Color.BLACK));
+            toBeSet.add(new Piece((2*i)+1, 6, Color.WHITE));
         }
         return toBeSet;
     }
