@@ -1,4 +1,4 @@
-package com.example.lista4;
+package org.checkers;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

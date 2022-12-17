@@ -1,4 +1,4 @@
-package  com.example.lista4;
+package org.checkers;
 
 import javafx.scene.shape.Ellipse;
 
