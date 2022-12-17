@@ -4,13 +4,13 @@ package org.checkers.model;
 public class Piece {
     private int posX;
     private int posY;
-    private Hue hue;
+    private Color color;
     private State state;
 
-    public Piece(int posX, int posY, Hue hue){
+    public Piece(int posX, int posY, Color color){
         this.posX = posX;
         this.posY = posY;
-        this.hue = hue;
+        this.color = color;
         this.state = State.MAN;
     }
 
@@ -31,8 +31,8 @@ public class Piece {
         return this.posX;
     }
 
-    public Hue getColor() {
-        return this.hue;
+    public Color getColor() {
+        return this.color;
     }
 
     public int getPosY(){
