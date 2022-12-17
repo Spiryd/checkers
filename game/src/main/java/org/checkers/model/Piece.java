@@ -1,4 +1,5 @@
-package org.checkers;
+package org.checkers.model;
+
 
 public class Piece {
     private int posX;

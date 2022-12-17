@@ -1,4 +1,4 @@
-package org.checkers;
+package org.checkers.model;
 
 enum State{
     MAN,

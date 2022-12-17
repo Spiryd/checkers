@@ -1,4 +1,4 @@
-package org.checkers;
+package org.checkers.model;
 
 public enum Hue {
     BLACK,
