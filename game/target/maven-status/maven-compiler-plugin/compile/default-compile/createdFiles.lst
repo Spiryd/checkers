@@ -1,0 +1,11 @@
+org\checkers\Board.class
+org\checkers\Client.class
+org\checkers\Hue.class
+org\checkers\State.class
+org\checkers\Game.class
+org\checkers\Kwadrat.class
+org\checkers\Piece.class
+org\checkers\Client$1.class
+org\checkers\Checker.class
+org\checkers\Server.class
+org\checkers\Main.class

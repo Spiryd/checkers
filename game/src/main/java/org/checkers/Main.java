@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import org.checkers.ui.Checker;
+import org.checkers.ui.Kwadrat;
 
 public class Main extends Application {
     Kwadrat[][] Pola;
