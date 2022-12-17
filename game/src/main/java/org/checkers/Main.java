@@ -21,19 +21,21 @@ public class Main extends Application {
         initUI(stage);
     }
 
-    EventHandler<MouseEvent> filer = mouseEvent -> {
-        int x = (int) (mouseEvent.getX() - (mouseEvent.getX() % 100))/100;
-        int y = (int) (mouseEvent.getY() - (mouseEvent.getY() % 100))/100;
-        System.out.printf("x: %d%n", x);
-        System.out.printf("y: %d%n", y);
-        mouseEvent.consume();
-    };
-
     public void initUI(Stage stage) {
         double dimensions = 1000;
         double SquareSize = dimensions/8;
         int red_position = 3;
         int white_position = 5;
+
+        double finalSquareSize = SquareSize;
+        EventHandler<MouseEvent> filer = mouseEvent -> {
+            int x = (int) ((mouseEvent.getX() - (mouseEvent.getX() % finalSquareSize))/ finalSquareSize);
+            int y = (int) ((mouseEvent.getY() - (mouseEvent.getY() % finalSquareSize))/ finalSquareSize);
+            System.out.printf("x: %d%n", x);
+            System.out.printf("y: %d%n", y);
+            mouseEvent.consume();
+        };
+
         switch(arg) {
             case 1:
                 Pola = new Kwadrat[8][8];
