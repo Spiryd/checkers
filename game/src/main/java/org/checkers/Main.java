@@ -1,7 +1,9 @@
 package org.checkers;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.BorderPane;
@@ -18,6 +20,15 @@ public class Main extends Application {
     public void start(Stage stage) {
         initUI(stage);
     }
+
+    EventHandler<MouseEvent> filer = mouseEvent -> {
+        int x = (int) (mouseEvent.getX() - (mouseEvent.getX() % 100))/100;
+        int y = (int) (mouseEvent.getY() - (mouseEvent.getY() % 100))/100;
+        System.out.printf("x: %d%n", x);
+        System.out.printf("y: %d%n", y);
+        mouseEvent.consume();
+    };
+
     public void initUI(Stage stage) {
         double dimensions = 1000;
         double SquareSize = dimensions/8;
@@ -68,6 +79,8 @@ public class Main extends Application {
                     if(row < red_position) {
                         red_checkers[checkerid] = new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column);
                         red_checkers[checkerid].setFill(Color.RED);
+                        red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
+                        red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
                         Panel.getChildren().add(red_checkers[checkerid]);
                         checkerid++;
                     }
