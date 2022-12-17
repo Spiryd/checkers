@@ -1,6 +1,6 @@
 package org.checkers.model;
 
-public enum Hue {
+public enum Color {
     BLACK,
     WHITE
 }
