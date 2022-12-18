@@ -48,7 +48,7 @@ public class Board {
             throw new IllegalMoveException();
         }
         //checks for Man moves
-        if (movingPiece.getState() == State.MAN){
+        if (movingPiece.getState() == Rank.MAN){
             if (checkManMove(movingPiece.getColor(), initX, initY, newX, newY)){
                 pieces.get(pieceId).setCoords(newX, newY);
             }

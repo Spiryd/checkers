@@ -1,6 +1,6 @@
 package org.checkers.model;
 
-enum State{
+enum Rank {
     MAN,
     KING
 }

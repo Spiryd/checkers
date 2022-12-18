@@ -1,5 +1,7 @@
 package org.checkers;
 
+import org.checkers.State.Player;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -8,10 +10,7 @@ public class Game implements Runnable{
     private Socket firstPlayer;
     private Socket secondPlayer;
 
-
-    private final static int FIRST=1;
-    private final static int SECOND=2;
-    private static int turn=FIRST;
+    private static Player turn = Player.ONE;
 
 
     public Game(Socket firstPlayer, Socket secondPlayer){
@@ -43,26 +42,28 @@ public class Game implements Runnable{
             outF.println("1");
             outS.println("2");
 
-            String line;
+            String initialCoords;
+            String nextCoords;
             do {
-                if (turn==SECOND) {
+                if (turn == Player.TWO) {
                     // Odbieranie od socketa
-                    line = inS.readLine();
+                    initialCoords = inS.readLine();
+                    nextCoords = inS.readLine();
                     // Wypisywanie na serwerze
-                    System.out.println(line);
-                    // Wysylanie do socketa
-                    outF.println("-> (" + line + ")");
-                    turn=FIRST;
+                    System.out.println(initialCoords);
+                    System.out.println(nextCoords);
+                    // Wysylanie do socket
+                    turn = Player.ONE;
                 }
-
-                if (turn==FIRST) {
+                if (turn == Player.ONE) {
                     // Odbieranie od socketa
-                    line = inF.readLine();
+                    initialCoords = inF.readLine();
+                    nextCoords = inF.readLine();
                     // Wypisywanie na serwerze
-                    System.out.println(line);
+                    System.out.println(initialCoords);
+                    System.out.println(nextCoords);
                     // Wysylanie do socketa
-                    outS.println("-> (" + line + ")");
-                    turn=SECOND;
+                    turn = Player.TWO;
                 }
             } while (true);
 

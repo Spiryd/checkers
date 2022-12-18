@@ -5,13 +5,13 @@ public class Piece {
     private int posX;
     private int posY;
     private Color color;
-    private State state;
+    private Rank state;
 
     public Piece(int posX, int posY, Color color){
         this.posX = posX;
         this.posY = posY;
         this.color = color;
-        this.state = State.MAN;
+        this.state = Rank.MAN;
     }
 
     public void setCoords(int posX, int posY){
@@ -20,10 +20,10 @@ public class Piece {
     }
 
     public void promote(){
-        this.state = State.KING;
+        this.state = Rank.KING;
     }
 
-    public State getState(){
+    public Rank getState(){
         return this.state;
     }
 
