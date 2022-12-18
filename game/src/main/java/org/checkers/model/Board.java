@@ -147,7 +147,6 @@ public class Board {
                 killPiece(coordsToId(leapedPieces.get(0).getPosX(), leapedPieces.get(0).getPosY()));
                 return true;
             }
-
         }
         else {
             return false;

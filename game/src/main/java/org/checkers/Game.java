@@ -4,6 +4,7 @@ import org.checkers.State.Player;
 import org.checkers.model.Board;
 import org.checkers.model.IllegalMoveException;
 import org.checkers.model.NoSuchPieceException;
+import org.checkers.util.Translator;
 
 import java.io.*;
 import java.net.Socket;
@@ -56,13 +57,13 @@ public class Game implements Runnable{
                     initialCoordsMessage = inS.readLine();
                     nextCoordsMessage = inS.readLine();
                     // Wypisywanie na serwerze
-                    System.out.println(initialCoordsMessage);
-                    System.out.println(nextCoordsMessage);
+                    //System.out.println(initialCoordsMessage);
+                    //System.out.println(nextCoordsMessage);
                     //translation
                     initialCoords = translator.translateCoords(initialCoordsMessage);
                     nextCoords = translator.translateCoords(nextCoordsMessage);
-                    System.out.println(Arrays.toString(initialCoords));
-                    System.out.println(Arrays.toString(nextCoords));
+                    //System.out.println(Arrays.toString(initialCoords));
+                    //System.out.println(Arrays.toString(nextCoords));
                     try{
                         board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
                     }
@@ -70,8 +71,8 @@ public class Game implements Runnable{
                         e.printStackTrace();
                     }
                     // Wysylanie do socket
-                    outF.println(initialCoordsMessage + nextCoordsMessage);
-                    outS.println(initialCoordsMessage + nextCoordsMessage);
+                    outF.println(initialCoordsMessage + nextCoordsMessage + "2");
+                    outS.println(initialCoordsMessage + nextCoordsMessage + "2");
                     turn = Player.ONE;
                 }
                 if (turn == Player.ONE) {
@@ -79,12 +80,14 @@ public class Game implements Runnable{
                     initialCoordsMessage = inF.readLine();
                     nextCoordsMessage = inF.readLine();
                     // Wypisywanie na serwerze
-                    System.out.println(initialCoordsMessage);
-                    System.out.println(nextCoordsMessage);
+                    //System.out.println(initialCoordsMessage);
+                    //System.out.println(nextCoordsMessage);
                     // Wysylanie do socketa
                     //translation
                     initialCoords = translator.translateCoords(initialCoordsMessage);
                     nextCoords = translator.translateCoords(nextCoordsMessage);
+                    //System.out.println(Arrays.toString(initialCoords));
+                    //System.out.println(Arrays.toString(nextCoords));
                     //send to model
                     try{
                         board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
@@ -93,8 +96,8 @@ public class Game implements Runnable{
                         e.printStackTrace();
                     }
                     // Wysylanie do socket
-                    outF.println(initialCoordsMessage + nextCoordsMessage);
-                    outS.println(initialCoordsMessage + nextCoordsMessage);
+                    outF.println(initialCoordsMessage + nextCoordsMessage + "1");
+                    outS.println(initialCoordsMessage + nextCoordsMessage + "1");
                     turn = Player.TWO;
                 }
             } while (true);

@@ -12,6 +12,7 @@ import org.checkers.State.Activity;
 import org.checkers.State.Player;
 import org.checkers.ui.Checker;
 import org.checkers.ui.Kwadrat;
+import org.checkers.util.Translator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,7 +43,8 @@ public class Main extends Application implements Runnable{
 
     @Override
     public void start(Stage stage) {
-        initUI(stage);
+        this.initUI(stage);
+        this.startThread();
     }
 
     public void initUI(Stage stage) {
@@ -140,6 +142,7 @@ public class Main extends Application implements Runnable{
         //red_checkers[0].Move(7,7);
         root.setCenter(Panel);
         stage.setScene(scene);
+        stage.setTitle(String.valueOf(player));
         stage.show();
     }
 
@@ -151,7 +154,7 @@ public class Main extends Application implements Runnable{
     @Override
     public void run() {
         arg = 1;
-        launch();
+        //launch();
         while(true) {
             synchronized (this) {
                 if (turn == player) {
@@ -211,11 +214,11 @@ public class Main extends Application implements Runnable{
             System.out.println(str);
             int [] coords = translator.translateCoords(str);
             System.out.println(Arrays.toString(coords));
-            if (this.player == Player.TWO) {
-                this.red_checkers[findPiece(coords[0], coords[1])].Move(coords[2], coords[3]);
+            if (coords[4] == 2) {
+                this.red_checkers[this.findPiece(coords[0], coords[1], coords[4])].Move(coords[2], coords[3]);
             }
             else {
-                this.white_checkers[findPiece(coords[0], coords[1])].Move(coords[2], coords[3]);
+                this.white_checkers[this.findPiece(coords[0], coords[1], coords[4])].Move(coords[2], coords[3]);
             }
         }
         catch (IOException e) {
@@ -226,15 +229,24 @@ public class Main extends Application implements Runnable{
     public void init(){
         this.listenSocket();
         this.receiveInitFromServer();
-        this.startThread();
     }
 
-    private int findPiece(int x, int y){
+    private int findPiece(int x, int y, int pieceKind){
         int id = -1;
-        for (int i = 0; i < red_checkers.length; i++) {
-            if(red_checkers[i].getColumn() == x && red_checkers[i].getRow() == y){
-                id = i;
-                break;
+        if (pieceKind == 2){
+            for (int i = 0; i < red_checkers.length; i++) {
+                if(red_checkers[i].getColumn() == x && red_checkers[i].getRow() == y){
+                    id = i;
+                    break;
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < white_checkers.length; i++) {
+                if(white_checkers[i].getColumn() == x && white_checkers[i].getRow() == y){
+                    id = i;
+                    break;
+                }
             }
         }
         return id;

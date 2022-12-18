@@ -1,4 +1,4 @@
-package org.checkers;
+package org.checkers.util;
 
 public class Translator {
     public int[] translateCoords(String message){
