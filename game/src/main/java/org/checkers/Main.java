@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Main extends Application implements Runnable{
@@ -37,7 +38,6 @@ public class Main extends Application implements Runnable{
     Checker[] red_checkers;
     Checker[] white_checkers;
 
-    String message = "";
     static int arg = 0;
 
     @Override
@@ -59,6 +59,8 @@ public class Main extends Application implements Runnable{
             message += Integer.toString(x);
             message += ";";
             message += Integer.toString(y);
+            message += ";";
+            System.out.println(message);
             out.println(message);
             mouseEvent.consume();
         };
@@ -108,8 +110,10 @@ public class Main extends Application implements Runnable{
                     if(row < red_position) {
                         red_checkers[checkerid] = new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column);
                         red_checkers[checkerid].setFill(Color.RED);
-                        red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
-                        red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
+                        if (player == Player.TWO) {
+                            red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
+                            red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
+                        }
                         Panel.getChildren().add(red_checkers[checkerid]);
                         checkerid++;
                     }
@@ -119,6 +123,10 @@ public class Main extends Application implements Runnable{
                         }
                         white_checkers[checkerid] = new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column);
                         white_checkers[checkerid].setFill(Color.WHITE);
+                        if (player == Player.ONE) {
+                            white_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
+                            white_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
+                        }
                         Panel.getChildren().add(white_checkers[checkerid]);
                         checkerid++;
                     }
@@ -129,7 +137,7 @@ public class Main extends Application implements Runnable{
             column = 0;
             row++;
         }
-     //   red_checkers[0].Move(3,2);
+        //red_checkers[0].Move(7,7);
         root.setCenter(Panel);
         stage.setScene(scene);
         stage.show();
@@ -142,15 +150,12 @@ public class Main extends Application implements Runnable{
 
     @Override
     public void run() {
+        arg = 1;
+        launch();
         while(true) {
             synchronized (this) {
                 if (turn == player) {
-                    try {
-                        wait(10);
-                    }
-                    catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    receive();
                 }
                 if (activity == Activity.ACTIVE){
                     receive();
@@ -195,22 +200,26 @@ public class Main extends Application implements Runnable{
     }
 
     private void startThread() {
-        Thread gTh = new Thread(this);
-        gTh.start();
+        Thread thread = new Thread(this);
+        thread.start();
     }
 
     private void receive(){
         try {
+            Translator translator = new Translator();
             String str = in.readLine();
             System.out.println(str);
-            System.out.println("My turn");
+            int [] coords = translator.translateCoords(str);
+            System.out.println(Arrays.toString(coords));
+            if (this.player == Player.TWO) {
+                this.red_checkers[findPiece(coords[0], coords[1])].Move(coords[2], coords[3]);
+            }
+            else {
+                this.white_checkers[findPiece(coords[0], coords[1])].Move(coords[2], coords[3]);
+            }
         }
         catch (IOException e) {
             System.out.println("Read failed"); System.exit(1);}
-    }
-
-    private void go(){
-        launch();
     }
 
     @Override
@@ -218,5 +227,16 @@ public class Main extends Application implements Runnable{
         this.listenSocket();
         this.receiveInitFromServer();
         this.startThread();
+    }
+
+    private int findPiece(int x, int y){
+        int id = -1;
+        for (int i = 0; i < red_checkers.length; i++) {
+            if(red_checkers[i].getColumn() == x && red_checkers[i].getRow() == y){
+                id = i;
+                break;
+            }
+        }
+        return id;
     }
 }

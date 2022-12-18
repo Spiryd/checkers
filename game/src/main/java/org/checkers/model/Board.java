@@ -90,9 +90,11 @@ public class Board {
             return false;
         }
         if(color == Color.WHITE){
-            if((initY + 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
+            if((initY - 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
+                if(newY == 0){pieces.get(coordsToId(initX, initY)).promote();}
                 return true;
-            } else if ((initY + 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX - initX), (newY - initY))) {
+            } else if ((initY - 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX - initX), (newY - initY))) {
+                if(newY == 0){pieces.get(coordsToId(initX, initY)).promote();}
                 killPiece(coordsToId((newX - initX), (newY - initY)));
                 return true;
             }else {
@@ -100,9 +102,11 @@ public class Board {
             }
         }
         else {
-            if((initY - 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
+            if((initY + 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
+                if(newY == 7){pieces.get(coordsToId(initX, initY)).promote();}
                 return true;
-            } else if ((initY - 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX - initX), (newY - initY))) {
+            } else if ((initY + 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX - initX), (newY - initY))) {
+                if(newY == 7){pieces.get(coordsToId(initX, initY)).promote();}
                 killPiece(coordsToId((newX - initX), (newY - initY)));
                 return true;
             }else {

@@ -1,14 +1,21 @@
 package org.checkers;
 
 import org.checkers.State.Player;
+import org.checkers.model.Board;
+import org.checkers.model.IllegalMoveException;
+import org.checkers.model.NoSuchPieceException;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Game implements Runnable{
 
     private Socket firstPlayer;
     private Socket secondPlayer;
+
+    private Board board;
+
 
     private static Player turn = Player.ONE;
 
@@ -23,46 +30,71 @@ public class Game implements Runnable{
     public void run() {
 
         try{
-            //Inicjalizacja pobieranie od socketa dla player1
+            board = new Board();
+
             InputStream inputF = firstPlayer.getInputStream();
             BufferedReader inF = new BufferedReader(new InputStreamReader(inputF));
-
-            //Inicjalizacja pobieranie od socketa dla player2
             InputStream inputS = secondPlayer.getInputStream();
             BufferedReader inS = new BufferedReader(new InputStreamReader(inputS));
 
-            //Inicjalizacja Wysylania do socketa dla player1
             OutputStream outputF = firstPlayer.getOutputStream();
             PrintWriter outF = new PrintWriter(outputF, true);
-
-            //Inicjalizacja Wysylania do socketa dla player2
             OutputStream outputS = secondPlayer.getOutputStream();
             PrintWriter outS = new PrintWriter(outputS, true);
 
             outF.println("1");
             outS.println("2");
 
-            String initialCoords;
-            String nextCoords;
+            String initialCoordsMessage;
+            String nextCoordsMessage;
+            Translator translator = new Translator();
+            int[] initialCoords;
+            int[] nextCoords;
             do {
                 if (turn == Player.TWO) {
                     // Odbieranie od socketa
-                    initialCoords = inS.readLine();
-                    nextCoords = inS.readLine();
+                    initialCoordsMessage = inS.readLine();
+                    nextCoordsMessage = inS.readLine();
                     // Wypisywanie na serwerze
-                    System.out.println(initialCoords);
-                    System.out.println(nextCoords);
+                    System.out.println(initialCoordsMessage);
+                    System.out.println(nextCoordsMessage);
+                    //translation
+                    initialCoords = translator.translateCoords(initialCoordsMessage);
+                    nextCoords = translator.translateCoords(nextCoordsMessage);
+                    System.out.println(Arrays.toString(initialCoords));
+                    System.out.println(Arrays.toString(nextCoords));
+                    try{
+                        board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
+                    }
+                    catch (IllegalMoveException | NoSuchPieceException e){
+                        e.printStackTrace();
+                    }
                     // Wysylanie do socket
+                    outF.println(initialCoordsMessage + nextCoordsMessage);
+                    outS.println(initialCoordsMessage + nextCoordsMessage);
                     turn = Player.ONE;
                 }
                 if (turn == Player.ONE) {
                     // Odbieranie od socketa
-                    initialCoords = inF.readLine();
-                    nextCoords = inF.readLine();
+                    initialCoordsMessage = inF.readLine();
+                    nextCoordsMessage = inF.readLine();
                     // Wypisywanie na serwerze
-                    System.out.println(initialCoords);
-                    System.out.println(nextCoords);
+                    System.out.println(initialCoordsMessage);
+                    System.out.println(nextCoordsMessage);
                     // Wysylanie do socketa
+                    //translation
+                    initialCoords = translator.translateCoords(initialCoordsMessage);
+                    nextCoords = translator.translateCoords(nextCoordsMessage);
+                    //send to model
+                    try{
+                        board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
+                    }
+                    catch (IllegalMoveException | NoSuchPieceException e){
+                        e.printStackTrace();
+                    }
+                    // Wysylanie do socket
+                    outF.println(initialCoordsMessage + nextCoordsMessage);
+                    outS.println(initialCoordsMessage + nextCoordsMessage);
                     turn = Player.TWO;
                 }
             } while (true);
