@@ -10,7 +10,7 @@ public class Checker extends Ellipse {
         this.row = row;
         this.column = column;
     }
-    public void Move(int row, int column) {
+    public void Move(int column, int row) {
         setCenterX(62.0 + column*125.0);
         setCenterY(62.0 + row*125.0);
         this.row = row;

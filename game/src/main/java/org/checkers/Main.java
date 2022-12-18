@@ -43,8 +43,13 @@ public class Main extends Application implements Runnable{
 
     @Override
     public void start(Stage stage) {
+        System.out.println("3");
         this.initUI(stage);
+        //System.out.println(Arrays.toString(this.white_checkers));
+        //System.out.println(Arrays.toString(this.red_checkers));
         this.startThread();
+        //System.out.println(Arrays.toString(this.white_checkers));
+        //System.out.println(Arrays.toString(this.red_checkers));
     }
 
     public void initUI(Stage stage) {
@@ -69,22 +74,22 @@ public class Main extends Application implements Runnable{
 
         switch(arg) {
             case 1:
-                Pola = new Kwadrat[8][8];
-                red_checkers = new Checker[12];
-                white_checkers = new Checker[12];
+                this.Pola = new Kwadrat[8][8];
+                this.red_checkers = new Checker[12];
+                this.white_checkers = new Checker[12];
                 break;
             case 2:
-                Pola = new Kwadrat[10][10];
-                red_checkers = new Checker[20];
-                white_checkers = new Checker[20];
+                this.Pola = new Kwadrat[10][10];
+                this.red_checkers = new Checker[20];
+                this.white_checkers = new Checker[20];
                 SquareSize = dimensions/10;
                 red_position = 4;
                 white_position = 6;
                 break;
             case 3:
-                Pola = new Kwadrat[12][12];
-                red_checkers = new Checker[24];
-                white_checkers = new Checker[24];
+                this.Pola = new Kwadrat[12][12];
+                this.red_checkers = new Checker[24];
+                this.white_checkers = new Checker[24];
                 SquareSize = dimensions/12;
                 red_position = 4;
                 white_position = 8;
@@ -101,44 +106,47 @@ public class Main extends Application implements Runnable{
         int checkerid = 0;
         for (double i = 0.0; i < dimensions; i += SquareSize) {
             for (double j = 0.0; j < dimensions; j += SquareSize) {
-                Pola[column][row] = new Kwadrat(j, i, SquareSize);
+                this.Pola[column][row] = new Kwadrat(j, i, SquareSize);
                 if ((row+column) % 2 == 0) {
-                    Pola[column][row].setFill(Color.GREY);
+                    this.Pola[column][row].setFill(Color.GREY);
                     Panel.getChildren().add(Pola[column][row]);
                 }
                 else {
-                    Pola[column][row].setFill(Color.BLACK);
+                    this.Pola[column][row].setFill(Color.BLACK);
                     Panel.getChildren().add(Pola[column][row]);
                     if(row < red_position) {
-                        red_checkers[checkerid] = new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column);
-                        red_checkers[checkerid].setFill(Color.RED);
+                        this.red_checkers[checkerid] = new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column);
+                        this.red_checkers[checkerid].setFill(Color.RED);
                         if (player == Player.TWO) {
-                            red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
-                            red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
+                            this.red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
+                            this.red_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
                         }
-                        Panel.getChildren().add(red_checkers[checkerid]);
+                        Panel.getChildren().add(this.red_checkers[checkerid]);
                         checkerid++;
                     }
                     if(row >= white_position) {
-                        if (row == white_position) {
-                            checkerid = 0;
-                        }
-                        white_checkers[checkerid] = new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column);
-                        white_checkers[checkerid].setFill(Color.WHITE);
+                        this.white_checkers[checkerid] = new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column);
+                        this.white_checkers[checkerid].setFill(Color.WHITE);
                         if (player == Player.ONE) {
-                            white_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
-                            white_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
+                            this.white_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
+                            this.white_checkers[checkerid].addEventFilter(MouseEvent.MOUSE_RELEASED, filer);
                         }
-                        Panel.getChildren().add(white_checkers[checkerid]);
+                        Panel.getChildren().add(this.white_checkers[checkerid]);
                         checkerid++;
+                        //System.out.println(Arrays.toString(this.white_checkers));
                     }
                 }
-                Pola[column][row].toBack();
+                this.Pola[column][row].toBack();
                 column++;
             }
             column = 0;
             row++;
+            if (row == white_position) {
+                checkerid = 0;
+            }
         }
+        //System.out.println(Arrays.toString(this.white_checkers));
+        //System.out.println(Arrays.toString(this.red_checkers));
         //red_checkers[0].Move(7,7);
         root.setCenter(Panel);
         stage.setScene(scene);
@@ -147,25 +155,19 @@ public class Main extends Application implements Runnable{
     }
 
     public static void main(String[] args) {
+        System.out.println("1");
         arg = Integer.parseInt(args[0]);
         launch();
     }
 
     @Override
     public void run() {
+        System.out.println("4");
         arg = 1;
         //launch();
         while(true) {
-            synchronized (this) {
-                if (turn == player) {
-                    receive();
-                }
-                if (activity == Activity.ACTIVE){
-                    receive();
-                    activity = Activity.NONACTIVE;
-                }
-                notifyAll();
-            }
+            this.receive();
+
         }
     }
 
@@ -209,6 +211,8 @@ public class Main extends Application implements Runnable{
 
     private void receive(){
         try {
+            //System.out.println(Arrays.toString(this.white_checkers));
+            //System.out.println(Arrays.toString(this.red_checkers));
             Translator translator = new Translator();
             String str = in.readLine();
             System.out.println(str);
@@ -227,23 +231,30 @@ public class Main extends Application implements Runnable{
 
     @Override
     public void init(){
+        System.out.println("2");
         this.listenSocket();
         this.receiveInitFromServer();
     }
 
     private int findPiece(int x, int y, int pieceKind){
+        //System.out.println(Arrays.toString(this.white_checkers));
+        //System.out.println(Arrays.toString(this.red_checkers));
+        //System.out.println(this.white_checkers.length);
+        //System.out.println(this.red_checkers.length);
         int id = -1;
         if (pieceKind == 2){
-            for (int i = 0; i < red_checkers.length; i++) {
-                if(red_checkers[i].getColumn() == x && red_checkers[i].getRow() == y){
+            for (int i = 0; i < this.red_checkers.length; i++) {
+                //System.out.println(i);
+                if(this.red_checkers[i].getColumn() == x && this.red_checkers[i].getRow() == y){
                     id = i;
                     break;
                 }
             }
         }
         else {
-            for (int i = 0; i < white_checkers.length; i++) {
-                if(white_checkers[i].getColumn() == x && white_checkers[i].getRow() == y){
+            for (int i = 0; i < this.white_checkers.length; i++) {
+                //System.out.println(i);
+                if(white_checkers[i].getColumn() == x && this.white_checkers[i].getRow() == y){
                     id = i;
                     break;
                 }
