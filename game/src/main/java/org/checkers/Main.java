@@ -63,7 +63,7 @@ public class Main extends Application implements Runnable{
             message += ";";
             message += Integer.toString(y);
             message += ";";
-            System.out.println(message);
+            //System.out.println(message);
             out.println(message);
             mouseEvent.consume();
         };
@@ -213,19 +213,19 @@ public class Main extends Application implements Runnable{
             //System.out.println(str);
             int [] decodedMessage = translator.translateCoords(message);
             System.out.println(Arrays.toString(decodedMessage));
-            if (decodedMessage[4] == 2) {
-                this.red_checkers.get(this.findPiece(decodedMessage[0], decodedMessage[1], decodedMessage[4])).Move(decodedMessage[2], decodedMessage[3]);
-                if(decodedMessage[5] == 1){
-                    this.white_checkers.remove(this.findPiece(Math.abs(decodedMessage[2] - decodedMessage[0]), Math.abs(decodedMessage[3] - decodedMessage[1]), 1));
+            if(decodedMessage[5] != -1) {
+                if (decodedMessage[4] == 2) {
+                    this.red_checkers.get(this.findPiece(decodedMessage[0], decodedMessage[1], decodedMessage[4])).Move(decodedMessage[2], decodedMessage[3]);
+                    if (decodedMessage[5] == 1) {
+                        this.white_checkers.get(this.findPiece((decodedMessage[2] + decodedMessage[0])/2, (decodedMessage[3] + decodedMessage[1])/2, 1)).Move(100,100);
+                    }
+                } else {
+                    this.white_checkers.get(this.findPiece(decodedMessage[0], decodedMessage[1], decodedMessage[4])).Move(decodedMessage[2], decodedMessage[3]);
+                    if (decodedMessage[5] == 1) {
+                        this.red_checkers.get(this.findPiece((decodedMessage[2] + decodedMessage[0])/2, (decodedMessage[3] + decodedMessage[1])/2, 2)).Move(100, 100);
+                    }
                 }
             }
-            else {
-                this.white_checkers.get(this.findPiece(decodedMessage[0], decodedMessage[1], decodedMessage[4])).Move(decodedMessage[2], decodedMessage[3]);
-                if(decodedMessage[5] == 1){
-                    this.red_checkers.remove(this.findPiece(Math.abs(decodedMessage[2] - decodedMessage[0]), Math.abs(decodedMessage[3] - decodedMessage[1]), 2));
-                }
-            }
-
         }
         catch (IOException e) {
             System.out.println("Read failed"); System.exit(1);}
