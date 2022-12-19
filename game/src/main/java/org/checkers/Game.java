@@ -2,20 +2,16 @@ package org.checkers;
 
 import org.checkers.State.Player;
 import org.checkers.model.Board;
-import org.checkers.model.IllegalMoveException;
-import org.checkers.model.NoSuchPieceException;
 import org.checkers.util.Translator;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
+import java.util.Objects;
 
 public class Game implements Runnable{
 
-    private Socket firstPlayer;
-    private Socket secondPlayer;
-
-    private Board board;
+    private final Socket firstPlayer;
+    private final Socket secondPlayer;
 
 
     private static Player turn = Player.ONE;
@@ -31,7 +27,7 @@ public class Game implements Runnable{
     public void run() {
 
         try{
-            board = new Board();
+            Board board = new Board();
 
             InputStream inputF = firstPlayer.getInputStream();
             BufferedReader inF = new BufferedReader(new InputStreamReader(inputF));
@@ -52,6 +48,7 @@ public class Game implements Runnable{
             int[] initialCoords;
             int[] nextCoords;
             do {
+                String moveSignature;
                 if (turn == Player.TWO) {
                     // Odbieranie od socketa
                     initialCoordsMessage = inS.readLine();
@@ -64,16 +61,13 @@ public class Game implements Runnable{
                     nextCoords = translator.translateCoords(nextCoordsMessage);
                     //System.out.println(Arrays.toString(initialCoords));
                     //System.out.println(Arrays.toString(nextCoords));
-                    try{
-                        board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
-                    }
-                    catch (IllegalMoveException | NoSuchPieceException e){
-                        e.printStackTrace();
-                    }
+                    moveSignature = board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
                     // Wysylanie do socket
-                    outF.println(initialCoordsMessage + nextCoordsMessage + "2");
-                    outS.println(initialCoordsMessage + nextCoordsMessage + "2");
-                    turn = Player.ONE;
+                    outF.println(initialCoordsMessage + nextCoordsMessage + "2;" + moveSignature);
+                    outS.println(initialCoordsMessage + nextCoordsMessage + "2;" + moveSignature);
+                    if (!Objects.equals(moveSignature, "-1")) {
+                        turn = Player.ONE;
+                    }
                 }
                 if (turn == Player.ONE) {
                     // Odbieranie od socketa
@@ -89,25 +83,18 @@ public class Game implements Runnable{
                     //System.out.println(Arrays.toString(initialCoords));
                     //System.out.println(Arrays.toString(nextCoords));
                     //send to model
-                    try{
-                        board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
-                    }
-                    catch (IllegalMoveException | NoSuchPieceException e){
-                        e.printStackTrace();
-                    }
+                    moveSignature = board.movePiece(initialCoords[0], initialCoords[1], nextCoords[0], nextCoords[1]);
                     // Wysylanie do socket
-                    outF.println(initialCoordsMessage + nextCoordsMessage + "1");
-                    outS.println(initialCoordsMessage + nextCoordsMessage + "1");
-                    turn = Player.TWO;
+                    outF.println(initialCoordsMessage + nextCoordsMessage + "1;" + moveSignature);
+                    outS.println(initialCoordsMessage + nextCoordsMessage + "1;" + moveSignature);
+                    if (!Objects.equals(moveSignature, "-1")) {
+                        turn = Player.TWO;
+                    }
                 }
             } while (true);
 
         } catch (IOException ex) {
             System.err.println("ex");
         }
-    }
-
-    private void sendMove(DataOutputStream out, String text) throws IOException {
-        out.writeChars(text);
     }
 }

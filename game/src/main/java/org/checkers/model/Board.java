@@ -5,8 +5,6 @@ import java.util.ArrayList;
 public class Board {
     private ArrayList<Piece> pieces;
 
-    private int side = 8;
-
     public Board(){
         this.pieces = new ArrayList<>();
         this.pieces.addAll(setUpRed());
@@ -36,31 +34,36 @@ public class Board {
         return toBeSet;
     }
 
-    public void movePiece(int initX, int initY, int newX, int newY) throws NoSuchPieceException, IllegalMoveException {
+    public String movePiece(int initX, int initY, int newX, int newY){
         int pieceId = coordsToId(initX, initY);
+        String signature;
         //identifies the piece
         if (pieceId == -1){
-            throw new NoSuchPieceException();
+            return "-1";
         }
         Piece movingPiece = pieces.get(pieceId);
         //checks move if in bounds
         if (((newX < 0 || newX > 7) || (newY < 0 || newY > 7))) {
-            throw new IllegalMoveException();
+            return "-1";
         }
         //checks for Man moves
         if (movingPiece.getState() == Rank.MAN){
-            if (checkManMove(movingPiece.getColor(), initX, initY, newX, newY)){
+            signature = checkManMove(movingPiece.getColor(), initX, initY, newX, newY);
+            if (!signature.equals("-1")){
                 pieces.get(pieceId).setCoords(newX, newY);
+                return signature;
             }
             else {
-                throw new IllegalMoveException();
+                return signature;
             }
         }else { //checks for King moves
-            if (checkKingMove(movingPiece.getColor(), initX, initY, newX, newY)){
+            signature = checkKingMove(movingPiece.getColor(), initX, initY, newX, newY);
+            if (!signature.equals("-1")){
                 pieces.get(pieceId).setCoords(newX, newY);
+                return signature;
             }
             else {
-                throw new IllegalMoveException();
+                return signature;
             }
         }
     }
@@ -85,41 +88,41 @@ public class Board {
         return false;
     }
 
-    private boolean checkManMove(Color color ,int initX, int initY, int newX, int newY){
+    private String checkManMove(Color color ,int initX, int initY, int newX, int newY){
         if (checkForPiece(newX, newY)){
-            return false;
+            return "-1";
         }
         if(color == Color.WHITE){
             if((initY - 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
                 if(newY == 0){pieces.get(coordsToId(initX, initY)).promote();}
-                return true;
+                return "0";
             } else if ((initY - 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX - initX), (newY - initY))) {
                 if(newY == 0){pieces.get(coordsToId(initX, initY)).promote();}
                 killPiece(coordsToId((newX - initX), (newY - initY)));
-                return true;
+                return "1";
             }else {
-                return false;
+                return "-1";
             }
         }
         else {
             if((initY + 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
                 if(newY == 7){pieces.get(coordsToId(initX, initY)).promote();}
-                return true;
+                return "0";
             } else if ((initY + 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX - initX), (newY - initY))) {
                 if(newY == 7){pieces.get(coordsToId(initX, initY)).promote();}
                 killPiece(coordsToId((newX - initX), (newY - initY)));
-                return true;
+                return "1";
             }else {
-                return false;
+                return "-1";
             }
         }
     }
 
-    private boolean checkKingMove(Color color, int initX, int initY, int newX, int newY){
+    private String checkKingMove(Color color, int initX, int initY, int newX, int newY){
         int possibleTrajectory1 = initY - initX;// y = x + trajectory1
         int possibleTrajectory2 = initY + initX;// y = -x + trajectory2
         if (checkForPiece(newX, newY)){
-            return false;
+            return "-1";
         }
         if (newY == newX + possibleTrajectory1 || newY == -newX + possibleTrajectory2){
             ArrayList<Piece> leapedPieces = new ArrayList<>();
@@ -135,21 +138,21 @@ public class Board {
                 }
             }
             if(leapedPieces.size() == 0){
-                return true;
+                return "0";
             }
             else if (leapedPieces.size() > 1) {
-                return false;
+                return "-1";
             }
             else if (leapedPieces.get(0).getColor() == color) {
-                return false;
+                return "-1";
             }
             else {
                 killPiece(coordsToId(leapedPieces.get(0).getPosX(), leapedPieces.get(0).getPosY()));
-                return true;
+                return "1";
             }
         }
         else {
-            return false;
+            return "-1";
         }
     }
 
