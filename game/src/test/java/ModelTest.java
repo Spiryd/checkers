@@ -15,7 +15,7 @@ public class ModelTest {
     }
 
     @Test
-    public void BoardTest() throws NoSuchPieceException, IllegalMoveException {
+    public void BoardTest() {
         Board board = new Board();
         board.movePiece(2, 5, 1, 4);
     }
