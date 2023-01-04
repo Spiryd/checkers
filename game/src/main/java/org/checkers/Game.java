@@ -27,7 +27,7 @@ public class Game implements Runnable{
     public void run() {
 
         try{
-            Board board = new Board();
+            Board board = new Board(8);
 
             InputStream inputF = firstPlayer.getInputStream();
             BufferedReader inF = new BufferedReader(new InputStreamReader(inputF));

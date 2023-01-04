@@ -4,32 +4,28 @@ import java.util.ArrayList;
 
 public class Board {
     private ArrayList<Piece> pieces;
+    private int maxCoord;
 
-    public Board(){
+    public Board(int edgeLength){
+        this.maxCoord = edgeLength - 1;
         this.pieces = new ArrayList<>();
-        this.pieces.addAll(setUpRed());
-        this.pieces.addAll(setUpWhite());
-    }
-    private ArrayList<Piece> setUpRed(){
-        ArrayList<Piece> toBeSet = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece((2*i)+1, 0, Color.RED));
-            toBeSet.add(new Piece((2*i)+1, 2, Color.RED));
-        }
-        for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece(2*i, 1, Color.RED));
-        }
-        return toBeSet;
+        this.pieces.addAll(setUpPieces());
     }
 
-    private ArrayList<Piece> setUpWhite(){
+    private ArrayList<Piece> setUpPieces(){
         ArrayList<Piece> toBeSet = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece(2*i, 7, Color.WHITE));
-            toBeSet.add(new Piece(2*i, 5, Color.WHITE));
-        }
-        for (int i = 0; i < 4; i++) {
-            toBeSet.add(new Piece((2*i)+1, 6, Color.WHITE));
+        int rowsOfOnePieceColor = (maxCoord-1)/2;
+        for(int i = 0; i <= maxCoord; i++){
+            for(int j = 0; j <= maxCoord; j++){
+                if((i+j) % 2 != 0){
+                    if(i < rowsOfOnePieceColor){
+                        toBeSet.add(new Piece(j, i, Color.RED));
+                    }
+                    else if(i > (rowsOfOnePieceColor + 1)){
+                        toBeSet.add(new Piece(j, i, Color.WHITE));
+                    }
+                }
+            }
         }
         return toBeSet;
     }
@@ -43,7 +39,7 @@ public class Board {
         }
         Piece movingPiece = pieces.get(pieceId);
         //checks move if in bounds
-        if (((newX < 0 || newX > 7) || (newY < 0 || newY > 7))) {
+        if (((newX < 0 || newX > maxCoord) || (newY < 0 || newY > maxCoord))) {
             return "-1";
         }
         //checks for Man moves
@@ -106,10 +102,10 @@ public class Board {
         }
         else {
             if((initY + 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
-                if(newY == 7){pieces.get(coordsToId(initX, initY)).promote();}
+                if(newY == maxCoord){pieces.get(coordsToId(initX, initY)).promote();}
                 return "0";
             } else if ((initY + 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX + initX)/2, (newY + initY)/2)) {
-                if(newY == 7){pieces.get(coordsToId(initX, initY)).promote();}
+                if(newY == maxCoord){pieces.get(coordsToId(initX, initY)).promote();}
                 killPiece(coordsToId((newX + initX)/2, (newY + initY)/2));
                 return "1";
             }else {

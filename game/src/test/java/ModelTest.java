@@ -16,7 +16,7 @@ public class ModelTest {
 
     @Test
     public void BoardTest() {
-        Board board = new Board();
+        Board board = new Board(8);
         board.movePiece(2, 5, 1, 4);
     }
 }

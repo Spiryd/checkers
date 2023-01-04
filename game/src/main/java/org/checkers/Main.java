@@ -233,7 +233,7 @@ public class Main extends Application implements Runnable{
 
     @Override
     public void init(){
-        System.out.println("2");
+        //System.out.println("2");
         this.listenSocket();
         this.receiveInitFromServer();
     }
