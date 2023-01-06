@@ -33,11 +33,11 @@ public class Main extends Application implements Runnable{
      */
     Socket socket = null;
     /**
-     * The Out.
+     * output stream.
      */
     PrintWriter out = null;
     /**
-     * The In.
+     * input stream.
      */
     BufferedReader in = null;
 
@@ -242,11 +242,15 @@ public class Main extends Application implements Runnable{
         }
     }
 
+
     private void startThread() {
         Thread thread = new Thread(this);
         thread.start();
     }
 
+    /**
+     * Controls the gui
+     */
     private void receive(){
         try {
             //System.out.println(Arrays.toString(this.white_checkers));

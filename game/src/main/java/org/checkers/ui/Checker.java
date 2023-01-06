@@ -3,8 +3,8 @@ package org.checkers.ui;
 import javafx.scene.shape.Ellipse;
 
 public class Checker extends Ellipse {
-    int row;
-    int column;
+     private int row;
+     private int column;
     public Checker(double i, double j, double Size, int row, int column) {
         super(i, j, Size, Size);
         this.row = row;

@@ -52,12 +52,14 @@ public class Board {
         String signature;
         //identifies the piece
         if (pieceId == -1){
+            debugPrint();
             System.out.println("no piece or is it");
             return "-1";
         }
         Piece movingPiece = pieces.get(pieceId);
         //checks move if in bounds
         if (((newX < 0 || newX > maxCoord) || (newY < 0 || newY > maxCoord))) {
+            debugPrint();
             return "-1";
         }
         //checks for Man moves
@@ -67,8 +69,10 @@ public class Board {
             signature = checkKingMove(movingPiece.getColor(), initX, initY, newX, newY);
         }
         if (!signature.equals("-1")){
+            pieceId = coordsToId(initX, initY);
             pieces.get(pieceId).setCoords(newX, newY);
         }
+        debugPrint();
         return signature;
     }
 
@@ -88,6 +92,9 @@ public class Board {
                 break;
             }
         }
+        System.out.println(pieceId);
+        //System.out.println(pieces.get(pieceId).getPosX());
+        //System.out.println(pieces.get(pieceId).getPosY());
         return pieceId;
     }
 
@@ -99,7 +106,7 @@ public class Board {
      * @return ture if piece exists false otherwise
      */
     private boolean checkForPiece(int x, int y){
-        for (Piece piece : pieces){
+        for (Piece piece : this.pieces){
             if(piece.getPosX() == x && piece.getPosY() == y){
                 return true;
             }
@@ -124,27 +131,37 @@ public class Board {
         }
         if(color == Color.WHITE){
             if((initY - 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
-                if(newY == 0){pieces.get(coordsToId(initX, initY)).promote();}
+                if(newY == 0){
+                    pieces.get(coordsToId(initX, initY)).promote();
+                }
                 return "0";
             } else if ((initY - 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX + initX)/2, (newY + initY)/2)) {
-                if(newY == 0){pieces.get(coordsToId(initX, initY)).promote();}
+                if(newY == 0){
+                    pieces.get(coordsToId(initX, initY)).promote();
+                }
                 killPiece(coordsToId((newX + initX)/2, (newY + initY)/2));
+                //System.out.println("killing");
                 return "1";
             }else {
-                System.out.println("something else");
+                //System.out.println("something else");
                 return "-1";
             }
         }
         else {
             if((initY + 1) == newY && ((initX + 1) == newX || (initX - 1) == newX)){
-                if(newY == maxCoord){pieces.get(coordsToId(initX, initY)).promote();}
+                if(newY == maxCoord){
+                    pieces.get(coordsToId(initX, initY)).promote();
+                }
                 return "0";
             } else if ((initY + 2) == newY && ((initX + 2) == newX || (initX - 2) == newX) && checkForPiece((newX + initX)/2, (newY + initY)/2)) {
-                if(newY == maxCoord){pieces.get(coordsToId(initX, initY)).promote();}
+                if(newY == maxCoord){
+                    pieces.get(coordsToId(initX, initY)).promote();
+                }
                 killPiece(coordsToId((newX + initX)/2, (newY + initY)/2));
+                //System.out.println("killing");
                 return "1";
             }else {
-                System.out.println("something else");
+                //System.out.println("something else");
                 return "-1";
             }
         }
@@ -204,10 +221,36 @@ public class Board {
      *
      * @param id index of the piece to be killed
      */
-    private void killPiece(int id){
-        Piece piece = pieces.get(id);
-        System.out.println(piece.getPosX());
-        System.out.println(piece.getPosY());
+    private void killPiece(int id) {
+        //System.out.println("ok");
+        //Piece piece = pieces.get(id);
+        //System.out.println(piece.getPosX());
+        //System.out.println(piece.getPosY());
+        System.out.print("killing ");
+        System.out.println(id);
         pieces.remove(id);
+    }
+
+    private void debugPrint(){
+        ArrayList<Integer> row = new ArrayList<>();
+        StringBuilder printBoard = new StringBuilder();
+        for (int i = 0; i <= maxCoord; i++) {
+            for(Piece piece : this.pieces){
+                if(piece.getPosY() == i){
+                    row.add(piece.getPosX());
+                }
+            }
+            for (int j = 0; j <= maxCoord; j++){
+               if(row.contains(j)){
+                   printBoard.append("x");
+               }
+               else {
+                   printBoard.append("0");
+               }
+            }
+            row.clear();
+            printBoard.append("\n");
+        }
+        System.out.println(printBoard);
     }
 }
