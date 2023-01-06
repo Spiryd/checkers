@@ -5,7 +5,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Server to play checkers using sockets.
+ */
 public class Server {
+    /**
+     * Server initiation.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(2137)) {
 

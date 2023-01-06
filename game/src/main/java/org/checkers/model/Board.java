@@ -2,10 +2,18 @@ package org.checkers.model;
 
 import java.util.ArrayList;
 
+/**
+ * Controls the model.
+ */
 public class Board {
     private ArrayList<Piece> pieces;
     private int maxCoord;
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param edgeLength the edge length of th board
+     */
     public Board(int edgeLength){
         this.maxCoord = edgeLength - 1;
         this.pieces = new ArrayList<>();
@@ -30,11 +38,21 @@ public class Board {
         return toBeSet;
     }
 
+    /**
+     * Moves the piece and returns the move signature
+     *
+     * @param initX the initial x position of the piece to be moved
+     * @param initY the initial y position of the piece to be moved
+     * @param newX  the x position for the piece to be moved to
+     * @param newY  the y position for the piece to be moved to
+     * @return either "-1"-illegal move, "0"-normal move, "1"-kill
+     */
     public String movePiece(int initX, int initY, int newX, int newY){
         int pieceId = coordsToId(initX, initY);
         String signature;
         //identifies the piece
         if (pieceId == -1){
+            System.out.println("no piece or is it");
             return "-1";
         }
         Piece movingPiece = pieces.get(pieceId);
@@ -45,23 +63,13 @@ public class Board {
         //checks for Man moves
         if (movingPiece.getState() == Rank.MAN){
             signature = checkManMove(movingPiece.getColor(), initX, initY, newX, newY);
-            if (!signature.equals("-1")){
-                pieces.get(pieceId).setCoords(newX, newY);
-                return signature;
-            }
-            else {
-                return signature;
-            }
         }else { //checks for King moves
             signature = checkKingMove(movingPiece.getColor(), initX, initY, newX, newY);
-            if (!signature.equals("-1")){
-                pieces.get(pieceId).setCoords(newX, newY);
-                return signature;
-            }
-            else {
-                return signature;
-            }
         }
+        if (!signature.equals("-1")){
+            pieces.get(pieceId).setCoords(newX, newY);
+        }
+        return signature;
     }
     private int coordsToId(int x, int y) {
         int pieceId = -1;
@@ -86,6 +94,7 @@ public class Board {
 
     private String checkManMove(Color color ,int initX, int initY, int newX, int newY){
         if (checkForPiece(newX, newY)){
+            System.out.println("piece already here");
             return "-1";
         }
         if(color == Color.WHITE){
@@ -97,6 +106,7 @@ public class Board {
                 killPiece(coordsToId((newX + initX)/2, (newY + initY)/2));
                 return "1";
             }else {
+                System.out.println("something else");
                 return "-1";
             }
         }
@@ -109,6 +119,7 @@ public class Board {
                 killPiece(coordsToId((newX + initX)/2, (newY + initY)/2));
                 return "1";
             }else {
+                System.out.println("something else");
                 return "-1";
             }
         }
@@ -153,6 +164,9 @@ public class Board {
     }
 
     private void killPiece(int id){
+        Piece piece = pieces.get(id);
+        System.out.println(piece.getPosX());
+        System.out.println(piece.getPosY());
         pieces.remove(id);
     }
 }

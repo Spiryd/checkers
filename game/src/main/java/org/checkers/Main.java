@@ -23,23 +23,50 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Client for playing checkers.
+ */
 public class Main extends Application implements Runnable{
 
+    /**
+     * The Socket.
+     */
     Socket socket = null;
+    /**
+     * The Out.
+     */
     PrintWriter out = null;
+    /**
+     * The In.
+     */
     BufferedReader in = null;
 
+    /**
+     * The Player.
+     */
     Player player;
 
+    /**
+     * The Pola.
+     */
     Kwadrat[][] Pola;
+    /**
+     * The Red checkers.
+     */
     ArrayList<Checker> red_checkers;
+    /**
+     * The White checkers.
+     */
     ArrayList<Checker>  white_checkers;
 
+    /**
+     * The type of game to be played.
+     */
     static int arg = 0;
 
     @Override
     public void start(Stage stage) {
-        System.out.println("3");
+        //System.out.println("3");
         this.initUI(stage);
         //System.out.println(Arrays.toString(this.white_checkers));
         //System.out.println(Arrays.toString(this.red_checkers));
@@ -48,6 +75,11 @@ public class Main extends Application implements Runnable{
         //System.out.println(Arrays.toString(this.red_checkers));
     }
 
+    /**
+     * Initiates the GUI.
+     *
+     * @param stage the stage
+     */
     public void initUI(Stage stage) {
         double dimensions = 1000;
         double SquareSize = dimensions/8;
@@ -150,8 +182,13 @@ public class Main extends Application implements Runnable{
         stage.show();
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
-        System.out.println("1");
+        //System.out.println("1");
         arg = Integer.parseInt(args[0]);
         launch();
     }
@@ -166,6 +203,9 @@ public class Main extends Application implements Runnable{
         }
     }
 
+    /**
+     * Connects to the server.
+     */
     public void listenSocket() {
         try {
             this.socket = new Socket("localhost", 2137);
@@ -180,6 +220,9 @@ public class Main extends Application implements Runnable{
         }
     }
 
+    /**
+     * "handshake" with the server
+     */
     private void receiveInitFromServer() {
         try {
             if (Objects.equals(in.readLine(), "1")){

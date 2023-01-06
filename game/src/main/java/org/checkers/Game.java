@@ -8,20 +8,25 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 
+/**
+ * Thread for playing checkers
+ */
 public class Game implements Runnable{
 
     private final Socket firstPlayer;
     private final Socket secondPlayer;
-
-
     private static Player turn = Player.ONE;
 
 
+    /**
+     * Instantiates a new Game.
+     *
+     * @param firstPlayer  the first player
+     * @param secondPlayer the second player
+     */
     public Game(Socket firstPlayer, Socket secondPlayer){
         this.firstPlayer = firstPlayer;
         this.secondPlayer= secondPlayer;
-
-
     }
     @Override
     public void run() {
@@ -65,7 +70,7 @@ public class Game implements Runnable{
                     // Wysylanie do socket
                     outF.println(initialCoordsMessage + nextCoordsMessage + "2;" + moveSignature);
                     outS.println(initialCoordsMessage + nextCoordsMessage + "2;" + moveSignature);
-                    if (!Objects.equals(moveSignature, "-1")) {
+                    if (Objects.equals(moveSignature, "0")) {
                         turn = Player.ONE;
                     }
                 }
@@ -87,7 +92,7 @@ public class Game implements Runnable{
                     // Wysylanie do socket
                     outF.println(initialCoordsMessage + nextCoordsMessage + "1;" + moveSignature);
                     outS.println(initialCoordsMessage + nextCoordsMessage + "1;" + moveSignature);
-                    if (!Objects.equals(moveSignature, "-1")) {
+                    if (Objects.equals(moveSignature, "0")) {
                         turn = Player.TWO;
                     }
                 }
