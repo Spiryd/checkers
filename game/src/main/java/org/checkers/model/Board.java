@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Board {
     private ArrayList<Piece> pieces;
-    private int maxCoord;
+    private final int maxCoord;
 
     /**
      * Instantiates a new Board.
@@ -71,6 +71,14 @@ public class Board {
         }
         return signature;
     }
+
+    /**
+     * Returns the index of a piece given its coords
+     *
+     * @param x position on x axis
+     * @param y position on y axis
+     * @return index of the piece if not found return -1
+     */
     private int coordsToId(int x, int y) {
         int pieceId = -1;
         for (int i = 0; i < pieces.size(); i++) {
@@ -83,6 +91,13 @@ public class Board {
         return pieceId;
     }
 
+    /**
+     * Checks if a piece exists
+     *
+     * @param x position on x axis
+     * @param y position on y axis
+     * @return ture if piece exists false otherwise
+     */
     private boolean checkForPiece(int x, int y){
         for (Piece piece : pieces){
             if(piece.getPosX() == x && piece.getPosY() == y){
@@ -92,6 +107,16 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks if man move is legal the move signature
+     *
+     * @param color color of the piece to be checked
+     * @param initX initial x position of the piece
+     * @param initY initial y position of the piece
+     * @param newX x position for the piece to be moved to
+     * @param newY x position for the piece to be moved to
+     * @return either "-1"-illegal move, "0"-normal move, "1"-kill
+     */
     private String checkManMove(Color color ,int initX, int initY, int newX, int newY){
         if (checkForPiece(newX, newY)){
             System.out.println("piece already here");
@@ -125,6 +150,16 @@ public class Board {
         }
     }
 
+    /**
+     * Checks if King move is legal the move signature
+     *
+     * @param color color of the piece to be checked
+     * @param initX initial x position of the piece
+     * @param initY initial y position of the piece
+     * @param newX x position for the piece to be moved to
+     * @param newY x position for the piece to be moved to
+     * @return either "-1"-illegal move, "0"-normal move, "1"-kill
+     */
     private String checkKingMove(Color color, int initX, int initY, int newX, int newY){
         int possibleTrajectory1 = initY - initX;// y = x + trajectory1
         int possibleTrajectory2 = initY + initX;// y = -x + trajectory2
@@ -163,6 +198,12 @@ public class Board {
         }
     }
 
+
+    /**
+     * Kills the given piece
+     *
+     * @param id index of the piece to be killed
+     */
     private void killPiece(int id){
         Piece piece = pieces.get(id);
         System.out.println(piece.getPosX());
