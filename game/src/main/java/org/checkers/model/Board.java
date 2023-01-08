@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Controls the model.
  */
 public class Board {
-    private ArrayList<Piece> pieces;
+    private final ArrayList<Piece> pieces;
     private final int maxCoord;
 
     /**
@@ -57,11 +57,6 @@ public class Board {
             return "-1";
         }
         Piece movingPiece = pieces.get(pieceId);
-        //checks move if in bounds
-        if (((newX < 0 || newX > maxCoord) || (newY < 0 || newY > maxCoord))) {
-            debugPrint();
-            return "-1";
-        }
         //checks for Man moves
         if (movingPiece.getState() == Rank.MAN){
             signature = checkManMove(movingPiece.getColor(), initX, initY, newX, newY);
@@ -73,6 +68,10 @@ public class Board {
             pieces.get(pieceId).setCoords(newX, newY);
         }
         debugPrint();
+        String winner = checkForWin();
+        if(!winner.equals("0")){
+            return winner;
+        }
         return signature;
     }
 
@@ -93,8 +92,6 @@ public class Board {
             }
         }
         System.out.println(pieceId);
-        //System.out.println(pieces.get(pieceId).getPosX());
-        //System.out.println(pieces.get(pieceId).getPosY());
         return pieceId;
     }
 
@@ -125,6 +122,11 @@ public class Board {
      * @return either "-1"-illegal move, "0"-normal move, "1"-kill
      */
     private String checkManMove(Color color ,int initX, int initY, int newX, int newY){
+        //checks move if in bounds
+        if (checkIfInBounds(newX, newY)) {
+            debugPrint();
+            return "-1";
+        }
         if (checkForPiece(newX, newY)){
             System.out.println("piece already here");
             return "-1";
@@ -178,6 +180,11 @@ public class Board {
      * @return either "-1"-illegal move, "0"-normal move, "1"-kill
      */
     private String checkKingMove(Color color, int initX, int initY, int newX, int newY){
+        //checks move if in bounds
+        if (checkIfInBounds(newX, newY)) {
+            debugPrint();
+            return "-1";
+        }
         int possibleTrajectory1 = initY - initX;// y = x + trajectory1
         int possibleTrajectory2 = initY + initX;// y = -x + trajectory2
         if (checkForPiece(newX, newY)){
@@ -215,22 +222,20 @@ public class Board {
         }
     }
 
-
     /**
      * Kills the given piece
      *
      * @param id index of the piece to be killed
      */
     private void killPiece(int id) {
-        //System.out.println("ok");
-        //Piece piece = pieces.get(id);
-        //System.out.println(piece.getPosX());
-        //System.out.println(piece.getPosY());
         System.out.print("killing ");
         System.out.println(id);
         pieces.remove(id);
     }
 
+    /**
+     * Prints board for debugging
+     */
     private void debugPrint(){
         ArrayList<Integer> row = new ArrayList<>();
         StringBuilder printBoard = new StringBuilder();
@@ -252,5 +257,88 @@ public class Board {
             printBoard.append("\n");
         }
         System.out.println(printBoard);
+    }
+
+    /**
+     * Checks for the winning condition
+     *
+     * @return either "0" - no one wins, "w1" - white wins, "w2" - red wins
+     */
+    private String checkForWin(){
+        int whiteCounter = 0;
+        for (Piece piece: this.pieces){
+            if(piece.getColor() == Color.WHITE){
+                whiteCounter++;
+            }
+        }
+        if(whiteCounter == 0){
+            return "w1";
+        }
+        else if ( pieces.size() == whiteCounter ){
+            return "w2";
+        }
+        ArrayList<String> possibleWhiteMoves = new ArrayList<>();
+        ArrayList<String> possibleRedMoves = new ArrayList<>();
+        for (Piece piece: this.pieces){
+            int x = piece.getPosX();
+            int y = piece.getPosY();
+            if(piece.getColor() == Color.WHITE){
+                if(piece.getState() == Rank.MAN){
+                    possibleWhiteMoves.add(checkManMove(Color.WHITE, x, y, x+1, y-1));
+                    possibleWhiteMoves.add(checkManMove(Color.WHITE, x, y, x-1, y-1));
+                }else {
+                    for (int i = 1; i <= maxCoord; i++) {
+                        if(!(checkIfInBounds(x+i, y+i) || checkIfInBounds(x+i, y-i) || checkIfInBounds(x-i, y+i) || checkIfInBounds(x-i, y-i))){
+                            break;
+                        }
+                        if (checkIfInBounds(x+i, y+i)){
+                            possibleWhiteMoves.add(checkKingMove(Color.WHITE, x, y, x+i, y+i));
+                        }
+                        if (checkIfInBounds(x+i, y-i)){
+                            possibleWhiteMoves.add(checkKingMove(Color.WHITE, x, y, x+i, y-i));
+                        }
+                        if (checkIfInBounds(x-i, y+i)){
+                            possibleWhiteMoves.add(checkKingMove(Color.WHITE, x, y, x-i, y+i));
+                        }
+                        if (checkIfInBounds(x-i, y-i)){
+                            possibleWhiteMoves.add(checkKingMove(Color.WHITE, x, y, x-i, y-i));
+                        }
+                    }
+                }
+            }
+            else {
+                if(piece.getState() == Rank.MAN){
+                    possibleRedMoves.add(checkManMove(Color.RED, x, y, x+1, y+1));
+                    possibleRedMoves.add(checkManMove(Color.RED, x, y, x-1, y+1));
+                }else {
+                    for (int i = 1; i <= maxCoord; i++) {
+                        if(!(checkIfInBounds(x+i, y+i) || checkIfInBounds(x+i, y-i) || checkIfInBounds(x-i, y+i) || checkIfInBounds(x-i, y-i))){
+                            break;
+                        }
+                        if (checkIfInBounds(x+i, y+i)){
+                            possibleRedMoves.add(checkKingMove(Color.RED, x, y, x+i, y+i));
+                        }
+                        if (checkIfInBounds(x+i, y-i)){
+                            possibleRedMoves.add(checkKingMove(Color.RED, x, y, x+i, y-i));
+                        }
+                        if (checkIfInBounds(x-i, y+i)){
+                            possibleRedMoves.add(checkKingMove(Color.RED, x, y, x-i, y+i));
+                        }
+                        if (checkIfInBounds(x-i, y-i)){
+                            possibleRedMoves.add(checkKingMove(Color.RED, x, y, x-i, y-i));
+                        }
+                    }
+                }
+            }
+        }
+        if(!(possibleWhiteMoves.contains("0")||possibleWhiteMoves.contains("1"))){
+            return "w2";
+        } else if (!(possibleRedMoves.contains("0")||possibleRedMoves.contains("1"))) {
+            return "w1";
+        }
+        return  "0";
+    }
+    private boolean checkIfInBounds(int x, int y){
+        return (((x < 0 || x > maxCoord) || (y < 0 || y > maxCoord)));
     }
 }
