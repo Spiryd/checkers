@@ -31,11 +31,11 @@ public class Server {
                 Scanner skaner = new Scanner(System.in);
                 boolean inputCheck = true;
                 while(inputCheck) {
-                    System.out.println("Choose a game variant: '1' for an 8x8 board, '2' for a 10x10 board and '3' for a 12x12 board.");
+                    System.out.println("Choose a game variant: '8' for an 8x8 board, '10' for a 10x10 board and '12' for a 12x12 board.");
                     String wariant = skaner.nextLine();
                     try {
                         int variant = Integer.parseInt(wariant);
-                        if(!((variant == 1) || (variant == 2) || (variant == 3))) {
+                        if(!((variant == 8) || (variant == 10) || (variant == 12))) {
                             throw new NumberFormatException();
                         }
                     }
