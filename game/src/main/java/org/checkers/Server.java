@@ -27,25 +27,25 @@ public class Server {
 
                 Socket secondClient = serverSocket.accept();
                 System.out.println("Second client connected");
-                
+
                 Scanner skaner = new Scanner(System.in);
                 boolean inputCheck = true;
-                while(inputCheck) {
+                int variant = 0;
+                while (inputCheck) {
                     System.out.println("Choose a game variant: '8' for an 8x8 board, '10' for a 10x10 board and '12' for a 12x12 board.");
                     String wariant = skaner.nextLine();
                     try {
-                        int variant = Integer.parseInt(wariant);
-                        if(!((variant == 8) || (variant == 10) || (variant == 12))) {
+                        variant = Integer.parseInt(wariant);
+                        if (!((variant == 8) || (variant == 10) || (variant == 12))) {
                             throw new NumberFormatException();
                         }
-                    }
-                    catch(NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         System.out.println("Wrong input");
                         continue;
                     }
                     inputCheck = false;
                 }
-                
+
                 Game game = new Game(firstClient, secondClient, variant);
                 Thread gTh = new Thread(game);
                 gTh.start();
