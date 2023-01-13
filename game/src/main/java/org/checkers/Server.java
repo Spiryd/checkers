@@ -4,6 +4,7 @@ package org.checkers;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner; 
 
 /**
  * Server to play checkers using sockets.
@@ -26,8 +27,26 @@ public class Server {
 
                 Socket secondClient = serverSocket.accept();
                 System.out.println("Second client connected");
-
-                Game game = new Game(firstClient, secondClient);
+                
+                Scanner skaner = new Scanner(System.in);
+                boolean inputCheck = true;
+                while(inputCheck) {
+                    System.out.println("Choose a game variant: '1' for an 8x8 board, '2' for a 10x10 board and '3' for a 12x12 board.");
+                    String wariant = skaner.nextLine();
+                    try {
+                        int variant = Integer.parseInt(wariant);
+                        if(!((variant == 1) || (variant == 2) || (variant == 3))) {
+                            throw new NumberFormatException();
+                        }
+                    }
+                    catch(NumberFormatException e) {
+                        System.out.println("Wrong input");
+                        continue;
+                    }
+                    inputCheck = false;
+                }
+                
+                Game game = new Game(firstClient, secondClient, variant);
                 Thread gTh = new Thread(game);
                 gTh.start();
             }
