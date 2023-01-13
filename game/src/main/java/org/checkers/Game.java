@@ -15,6 +15,7 @@ public class Game implements Runnable{
 
     private final Socket firstPlayer;
     private final Socket secondPlayer;
+    private final int variant;
     private static Player turn = Player.ONE;
 
 
@@ -24,15 +25,16 @@ public class Game implements Runnable{
      * @param firstPlayer  the first player
      * @param secondPlayer the second player
      */
-    public Game(Socket firstPlayer, Socket secondPlayer){
+    public Game(Socket firstPlayer, Socket secondPlayer, int variant){
         this.firstPlayer = firstPlayer;
         this.secondPlayer= secondPlayer;
+        this.variant = variant;
     }
     @Override
     public void run() {
 
         try{
-            Board board = new Board(8);
+            Board board = new Board(variant);
 
             InputStream inputF = firstPlayer.getInputStream();
             BufferedReader inF = new BufferedReader(new InputStreamReader(inputF));
