@@ -71,7 +71,7 @@ public class Main extends Application implements Runnable{
      * @param stage the stage
      */
     public void initUI(Stage stage) {
-        double dimensions = 1000;
+        double dimensions = 800;
         double SquareSize = dimensions/8;
         int red_position = 3;
         int white_position = 5;
