@@ -1,0 +1,6 @@
+module:org.checkers
+org.checkers
+org.checkers.model
+org.checkers.State
+org.checkers.ui
+org.checkers.util
