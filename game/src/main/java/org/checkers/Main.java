@@ -27,7 +27,6 @@ import java.util.Objects;
  * Client for playing checkers.
  */
 public class Main extends Application implements Runnable{
-
     /**
      * The Socket.
      */
@@ -40,12 +39,10 @@ public class Main extends Application implements Runnable{
      * input stream.
      */
     BufferedReader in = null;
-
     /**
      * The Player.
      */
     Player player;
-
     /**
      * The Pola.
      */
@@ -63,13 +60,11 @@ public class Main extends Application implements Runnable{
      * The type of game to be played.
      */
     static int arg = 0;
-
     @Override
     public void start(Stage stage) {
         this.initUI(stage);
         this.startThread();
     }
-
     /**
      * Initiates the GUI.
      *
