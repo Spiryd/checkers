@@ -30,6 +30,10 @@ public class Game implements Runnable{
         this.secondPlayer= secondPlayer;
         this.variant = variant;
     }
+
+    /**
+     * Runs the Game gets input form players and sends output from controller
+     */
     @Override
     public void run() {
 

@@ -4,7 +4,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertArrayEquals;
 
 
+/**
+ * The type Util test.
+ */
 public class utilTest {
+    /**
+     * Translator test.
+     */
     @Test
     public void translatorTest(){
         Translator translator = new Translator();

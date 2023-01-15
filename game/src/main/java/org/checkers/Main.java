@@ -66,13 +66,8 @@ public class Main extends Application implements Runnable{
 
     @Override
     public void start(Stage stage) {
-        //System.out.println("3");
         this.initUI(stage);
-        //System.out.println(Arrays.toString(this.white_checkers));
-        //System.out.println(Arrays.toString(this.red_checkers));
         this.startThread();
-        //System.out.println(Arrays.toString(this.white_checkers));
-        //System.out.println(Arrays.toString(this.red_checkers));
     }
 
     /**
@@ -173,9 +168,6 @@ public class Main extends Application implements Runnable{
                 checkerid = 0;
             }
         }
-        //System.out.println(Arrays.toString(this.white_checkers));
-        //System.out.println(Arrays.toString(this.red_checkers));
-        //red_checkers[0].Move(7,7);
         root.setCenter(Panel);
         stage.setScene(scene);
         stage.setTitle(String.valueOf(player));
@@ -198,8 +190,9 @@ public class Main extends Application implements Runnable{
         System.out.println("4");
         arg = 1;
         //launch();
-        while(true) {
-            this.receive();
+        boolean playing = true;
+        while(playing) {
+            playing = this.receive();
         }
     }
 
@@ -242,7 +235,9 @@ public class Main extends Application implements Runnable{
         }
     }
 
-
+    /**
+     * Starts the client thread
+     */
     private void startThread() {
         Thread thread = new Thread(this);
         thread.start();
@@ -251,13 +246,25 @@ public class Main extends Application implements Runnable{
     /**
      * Controls the gui
      */
-    private void receive(){
+    private boolean receive(){
         try {
-            //System.out.println(Arrays.toString(this.white_checkers));
-            //System.out.println(Arrays.toString(this.red_checkers));
             Translator translator = new Translator();
             String message = in.readLine();
-            //System.out.println(str);
+            if (message.contains("w1")) {
+                if(player == Player.ONE) {
+                    System.out.println("You win!");
+                } else {
+                    System.out.println("You loose!");
+                }
+                return false;
+            } else if (message.contains("w2")) {
+                if(player == Player.TWO) {
+                    System.out.println("You win!");
+                } else {
+                    System.out.println("You loose!");
+                }
+                return false;
+            }
             int [] decodedMessage = translator.translateCoords(message);
             System.out.println(Arrays.toString(decodedMessage));
             if(decodedMessage[5] != -1) {
@@ -273,9 +280,11 @@ public class Main extends Application implements Runnable{
                     }
                 }
             }
+            return true;
         }
         catch (IOException e) {
             System.out.println("Read failed"); System.exit(1);}
+        return false;
     }
 
     @Override
@@ -286,14 +295,9 @@ public class Main extends Application implements Runnable{
     }
 
     private int findPiece(int x, int y, int pieceKind){
-        //System.out.println(Arrays.toString(this.white_checkers));
-        //System.out.println(Arrays.toString(this.red_checkers));
-        //System.out.println(this.white_checkers.length);
-        //System.out.println(this.red_checkers.length);
         int id = -1;
         if (pieceKind == 2){
             for (int i = 0; i < this.red_checkers.size(); i++) {
-                //System.out.println(i);
                 if(this.red_checkers.get(i).getColumn() == x && this.red_checkers.get(i).getRow() == y){
                     id = i;
                     break;
@@ -302,7 +306,6 @@ public class Main extends Application implements Runnable{
         }
         else {
             for (int i = 0; i < this.white_checkers.size(); i++) {
-                //System.out.println(i);
                 if(white_checkers.get(i).getColumn() == x && this.white_checkers.get(i).getRow() == y){
                     id = i;
                     break;

@@ -6,7 +6,14 @@ import java.util.ArrayList;
  * Controls the model.
  */
 public class Board {
+    /**
+     * All the pieces on the board
+     */
     private final ArrayList<Piece> pieces;
+
+    /**
+     * Size of the board
+     */
     private final int maxCoord;
 
     /**
@@ -20,6 +27,10 @@ public class Board {
         this.pieces.addAll(setUpPieces());
     }
 
+    /**
+     * Sets up pieces for game
+     * @return arrayList of setup pieces
+     */
     private ArrayList<Piece> setUpPieces(){
         ArrayList<Piece> toBeSet = new ArrayList<>();
         int rowsOfOnePieceColor = (maxCoord-1)/2;
@@ -128,7 +139,6 @@ public class Board {
             return "-1";
         }
         if (checkForPiece(newX, newY)){
-            System.out.println("piece already here");
             return "-1";
         }
         if(color == Color.WHITE){
@@ -338,6 +348,13 @@ public class Board {
         }
         return  "0";
     }
+
+    /**
+     * Checks if move is in bounds
+     * @param x x coordinate
+     * @param y x coordinate
+     * @return true if in bounds else false
+     */
     private boolean checkIfInBounds(int x, int y){
         return (((x < 0 || x > maxCoord) || (y < 0 || y > maxCoord)));
     }

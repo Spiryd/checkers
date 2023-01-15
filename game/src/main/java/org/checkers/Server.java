@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Server {
     /**
      * Server initiation.
-     *
+     * gets game type
      * @param args the input arguments
      */
     public static void main(String[] args) {
