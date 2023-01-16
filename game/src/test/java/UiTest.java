@@ -22,7 +22,7 @@ public class UiTest {
      */
     @Test
     public void CheckerTest(){
-        Checker checker = new Checker(1, 1, 10, 1, 1);
+        Checker checker = new Checker(1, 1, 10, 1, 1, 125);
         assertEquals(checker.getRow(), 1);
         assertEquals(checker.getColumn(), 1);
         checker.Move(2, 2);

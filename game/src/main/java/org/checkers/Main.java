@@ -71,24 +71,10 @@ public class Main extends Application implements Runnable{
      * @param stage the stage
      */
     public void initUI(Stage stage) {
-        double dimensions = 800;
+        double dimensions = 720;
         double SquareSize = dimensions/8;
         int red_position = 3;
         int white_position = 5;
-
-        double finalSquareSize = SquareSize;
-        EventHandler<MouseEvent> filer = mouseEvent -> {
-            String message = "";
-            int x = (int) ((mouseEvent.getX() - (mouseEvent.getX() % finalSquareSize))/ finalSquareSize);
-            int y = (int) ((mouseEvent.getY() - (mouseEvent.getY() % finalSquareSize))/ finalSquareSize);
-            message += Integer.toString(x);
-            message += ";";
-            message += Integer.toString(y);
-            message += ";";
-            //System.out.println(message);
-            out.println(message);
-            mouseEvent.consume();
-        };
 
         switch(arg) {
             case 1:
@@ -116,6 +102,21 @@ public class Main extends Application implements Runnable{
                 System.out.println("Nieprawidlowe dane");
                 System.exit(0);
         }
+
+        double finalSquareSize = SquareSize;
+        EventHandler<MouseEvent> filer = mouseEvent -> {
+            String message = "";
+            int x = (int) ((mouseEvent.getX() - (mouseEvent.getX() % finalSquareSize))/ finalSquareSize);
+            int y = (int) ((mouseEvent.getY() - (mouseEvent.getY() % finalSquareSize))/ finalSquareSize);
+            message += Integer.toString(x);
+            message += ";";
+            message += Integer.toString(y);
+            message += ";";
+            //System.out.println(message);
+            out.println(message);
+            mouseEvent.consume();
+        };
+
         Pane Panel = new Pane();
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, dimensions, dimensions, Color.BLACK);
@@ -133,7 +134,7 @@ public class Main extends Application implements Runnable{
                     this.Pola[column][row].setFill(Color.BLACK);
                     Panel.getChildren().add(Pola[column][row]);
                     if(row < red_position) {
-                        this.red_checkers.add(new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column));
+                        this.red_checkers.add(new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column, SquareSize));
                         this.red_checkers.get(checkerid).setFill(Color.RED);
                         if (player == Player.TWO) {
                             this.red_checkers.get(checkerid).addEventFilter(MouseEvent.MOUSE_PRESSED, filer);
@@ -143,7 +144,7 @@ public class Main extends Application implements Runnable{
                         checkerid++;
                     }
                     if(row >= white_position) {
-                        this.white_checkers.add(new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column));
+                        this.white_checkers.add(new Checker(j+(SquareSize/2), i+(SquareSize/2), SquareSize*0.4, row, column,  SquareSize));
                         this.white_checkers.get(checkerid).setFill(Color.WHITE);
                         if (player == Player.ONE) {
                             this.white_checkers.get(checkerid).addEventFilter(MouseEvent.MOUSE_PRESSED, filer);

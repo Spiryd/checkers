@@ -8,6 +8,8 @@ import javafx.scene.shape.Ellipse;
 public class Checker extends Ellipse {
      private int row;
      private int column;
+     private double squareSize;
+
 
     /**
      * Instantiates a new Checker.
@@ -18,10 +20,12 @@ public class Checker extends Ellipse {
      * @param row    the row of the board
      * @param column the column of the board
      */
-    public Checker(double i, double j, double Size, int row, int column) {
+    public Checker(double i, double j, double Size, int row, int column, double squareSize) {
         super(i, j, Size, Size);
         this.row = row;
         this.column = column;
+        this.squareSize = squareSize;
+
     }
 
     /**
@@ -31,8 +35,8 @@ public class Checker extends Ellipse {
      * @param row    the row
      */
     public void Move(int column, int row) {
-        setCenterX(62.0 + column*125.0);
-        setCenterY(62.0 + row*125.0);
+        setCenterX((squareSize/2) + column*squareSize);
+        setCenterY((squareSize/2)  + row*squareSize);
         this.row = row;
         this.column = column;
     }
